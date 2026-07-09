@@ -1,16 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-@font-face {
-  font-family: 'Geist';
-  src: url('https://cdn.jsdelivr.net/npm/geist-font@latest/dist/fonts/geist-sans/Geist-Regular.woff2') format('woff2');
-  font-weight: 400;
-}
-@font-face {
-  font-family: 'Geist';
-  src: url('https://cdn.jsdelivr.net/npm/geist-font@latest/dist/fonts/geist-sans/Geist-Bold.woff2') format('woff2');
-  font-weight: 700;
-}
-
+/* Geist font ko hata kar Inter use karein */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -157,7 +147,7 @@
   body {
     background-color: var(--color-background);
     color: var(--color-on-surface);
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     scroll-behavior: smooth;
   }
 
@@ -225,22 +215,6 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
     animation: shine 5s linear infinite;
-  }
-
-  .nav-link {
-    color: var(--color-on-surface);
-    opacity: 0.7;
-    transition: all 0.3s;
-  }
-  .nav-link:hover {
-    color: var(--color-primary);
-    opacity: 1;
-  }
-  .nav-link.active {
-    color: var(--color-primary);
-    font-weight: 700;
-    border-bottom: 2px solid var(--color-primary);
-    padding-bottom: 4px;
   }
 }
 

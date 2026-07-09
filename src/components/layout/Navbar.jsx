@@ -32,25 +32,18 @@ export const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // ✅ Universal scroll function with fallback
   const scrollToSection = (id) => {
-    setIsMobileMenuOpen(false); // Close menu first
     const el = document.getElementById(id);
     if (el) {
-      const yOffset = -80; // Adjust for navbar height
+      const yOffset = -80;
       const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
       window.scrollTo({ top: y, behavior: 'smooth' });
-    } else {
-      // Fallback: try to scroll to a section with that id
-      const fallbackEl = document.getElementById(id);
-      if (fallbackEl) {
-        fallbackEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
     }
+    setIsMobileMenuOpen(false);
   };
 
-  // ✅ Mobile item click handler
-  const handleMobileClick = (e, id) => {
+  // ✅ Single click handler - works on first click on mobile
+  const handleItemClick = (e, id) => {
     e.preventDefault();
     e.stopPropagation();
     scrollToSection(id);
@@ -58,7 +51,6 @@ export const Navbar = () => {
 
   return (
     <>
-      {/* Scroll Progress Bar */}
       <motion.div
         className="fixed top-0 left-0 h-0.5 bg-gradient-to-r from-primary to-secondary-container z-[60]"
         style={{ width: `${progress}%` }}
@@ -67,30 +59,30 @@ export const Navbar = () => {
         transition={{ duration: 0.1 }}
       />
 
-      {/* Navbar */}
       <nav
         className={`fixed top-0 w-full z-50 transition-all duration-300 ${
           isScrolled
             ? 'bg-surface/40 backdrop-blur-xl border-b border-white/10 shadow-[0_20px_40px_rgba(0,0,0,0.3)]'
             : 'bg-transparent'
         }`}
+        style={{ touchAction: 'manipulation' }} // ✅ Prevents double-tap zoom on mobile
       >
-        <div className="flex justify-between items-center max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop h-20">
+        <div className="flex justify-between items-center max-w-max-width mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 h-20">
           {/* Logo */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
             <Logo />
-            <span className="font-headline-lg text-headline-lg font-bold text-on-surface dark:text-on-surface whitespace-nowrap">
+            <span className="font-headline-lg text-lg sm:text-xl md:text-2xl font-bold text-on-surface dark:text-on-surface whitespace-nowrap">
               Aetheris AI
             </span>
           </div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-xl">
+          {/* ✅ Desktop Navigation */}
+          <div className="hidden lg:flex items-center gap-6 xl:gap-8">
             {navLinks.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
-                className="text-on-surface/70 hover:text-primary transition-all duration-300 font-body-md text-body-md"
+                className="text-on-surface/70 hover:text-primary transition-all duration-300 font-body-md text-sm xl:text-base"
                 onClick={(e) => {
                   e.preventDefault();
                   scrollToSection(link.id);
@@ -102,35 +94,35 @@ export const Navbar = () => {
           </div>
 
           {/* Right Actions */}
-          <div className="flex items-center gap-md">
+          <div className="flex items-center gap-2 sm:gap-3">
             <button
-              className="hidden lg:block text-on-surface/70 hover:text-primary font-medium transition-all text-body-md"
+              className="hidden xl:block text-on-surface/70 hover:text-primary font-medium transition-all text-sm xl:text-base"
               onClick={() => scrollToSection('product-demo')}
             >
               Watch Demo
             </button>
             <button
-              className="bg-gradient-to-r from-primary to-secondary-container px-lg py-sm rounded-lg font-bold text-on-primary hover:scale-105 active:scale-95 transition-all shadow-[0_0_20px_rgba(192,193,255,0.3)] text-body-md"
+              className="hidden md:block bg-gradient-to-r from-primary to-secondary-container px-4 py-1.5 sm:px-5 sm:py-2 rounded-lg font-bold text-on-primary hover:scale-105 active:scale-95 transition-all shadow-[0_0_20px_rgba(192,193,255,0.3)] text-sm sm:text-base whitespace-nowrap"
               onClick={() => scrollToSection('pricing')}
             >
               Start Free Trial
             </button>
             <ThemeToggle />
 
-            {/* Hamburger Menu Button */}
+            {/* ✅ Hamburger Menu */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-xs hover:bg-white/10 rounded-full transition-colors"
+              className="lg:hidden p-1 sm:p-2 hover:bg-white/10 rounded-full transition-colors"
               aria-label="Toggle menu"
             >
-              <span className="material-symbols-outlined text-primary text-2xl">
+              <span className="material-symbols-outlined text-primary text-2xl sm:text-3xl">
                 {isMobileMenuOpen ? 'close' : 'menu'}
               </span>
             </button>
           </div>
         </div>
 
-        {/* ✅ Mobile Menu - Fully Clickable with Touch Support */}
+        {/* ✅ Mobile/Tablet Menu - Single click only */}
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div
@@ -138,56 +130,47 @@ export const Navbar = () => {
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
-              className="md:hidden glass-surface border-t border-white/10 overflow-hidden"
-              style={{ pointerEvents: 'auto', position: 'relative', zIndex: 100 }}
+              className="lg:hidden glass-surface border-t border-white/10 overflow-y-auto"
+              style={{
+                pointerEvents: 'auto',
+                position: 'relative',
+                zIndex: 100,
+                maxHeight: 'calc(100vh - 80px)',
+                touchAction: 'manipulation',
+              }}
             >
-              <div className="flex flex-col p-lg space-y-md">
-                {/* Navigation Links */}
+              <div className="flex flex-col p-4 sm:p-6 space-y-3 sm:space-y-4">
                 {navLinks.map((link) => (
-                  <button
+                  <div
                     key={link.name}
-                    className="text-on-surface/70 hover:text-primary transition-colors font-body-md text-body-md py-sm px-md rounded-lg hover:bg-white/5 text-left cursor-pointer w-full"
-                    onClick={(e) => handleMobileClick(e, link.id)}
-                    onTouchStart={(e) => {
-                      e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)';
-                    }}
-                    onTouchEnd={(e) => {
-                      e.currentTarget.style.backgroundColor = 'transparent';
-                    }}
+                    className="text-on-surface/70 hover:text-primary transition-colors font-body-md text-base sm:text-lg py-2 sm:py-3 px-3 sm:px-4 rounded-lg hover:bg-white/5 cursor-pointer w-full active:bg-white/10"
+                    onClick={(e) => handleItemClick(e, link.id)}
+                    role="button"
+                    tabIndex={0}
                   >
                     {link.name}
-                  </button>
+                  </div>
                 ))}
 
                 <hr className="border-white/10" />
 
-                {/* Watch Demo Button */}
-                <button
-                  className="glass-surface px-xl py-md rounded-xl font-bold text-on-surface text-body-lg hover:bg-white/10 transition-all border border-white/20 w-full"
-                  onClick={(e) => handleMobileClick(e, 'product-demo')}
-                  onTouchStart={(e) => {
-                    e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.1)';
-                  }}
-                  onTouchEnd={(e) => {
-                    e.currentTarget.style.backgroundColor = 'transparent';
-                  }}
+                <div
+                  className="glass-surface px-4 sm:px-6 py-3 sm:py-4 rounded-xl font-bold text-on-surface text-base sm:text-lg hover:bg-white/10 transition-all border border-white/20 w-full text-center cursor-pointer active:bg-white/20"
+                  onClick={(e) => handleItemClick(e, 'product-demo')}
+                  role="button"
+                  tabIndex={0}
                 >
                   Watch Demo
-                </button>
+                </div>
 
-                {/* Start Free Trial Button */}
-                <button
-                  className="bg-gradient-to-r from-primary to-secondary-container px-xl py-md rounded-xl font-bold text-on-primary text-body-lg hover:brightness-110 transition-all w-full shadow-[0_0_20px_rgba(192,193,255,0.3)]"
-                  onClick={(e) => handleMobileClick(e, 'pricing')}
-                  onTouchStart={(e) => {
-                    e.currentTarget.style.opacity = '0.8';
-                  }}
-                  onTouchEnd={(e) => {
-                    e.currentTarget.style.opacity = '1';
-                  }}
+                <div
+                  className="bg-gradient-to-r from-primary to-secondary-container px-4 sm:px-6 py-3 sm:py-4 rounded-xl font-bold text-on-primary text-base sm:text-lg hover:brightness-110 transition-all w-full text-center shadow-[0_0_20px_rgba(192,193,255,0.3)] cursor-pointer active:brightness-75"
+                  onClick={(e) => handleItemClick(e, 'pricing')}
+                  role="button"
+                  tabIndex={0}
                 >
                   Start Free Trial
-                </button>
+                </div>
               </div>
             </motion.div>
           )}

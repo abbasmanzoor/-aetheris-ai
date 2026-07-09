@@ -4,7 +4,7 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
-  darkMode: "class", // ہم class نہیں استعمال کر رہے، لیکن رکھنے میں کوئی حرج نہیں
+  darkMode: "class",
   theme: {
     extend: {
       borderRadius: {
@@ -29,14 +29,14 @@ export default {
         "max-width": "1280px",
       },
       fontFamily: {
-        "headline-xl": ["Geist", "sans-serif"],
-        "headline-lg": ["Geist", "sans-serif"],
-        "display-lg": ["Geist", "sans-serif"],
-        "display-lg-mobile": ["Geist", "sans-serif"],
+        "headline-xl": ["Inter", "sans-serif"],
+        "headline-lg": ["Inter", "sans-serif"],
+        "display-lg": ["Inter", "sans-serif"],
+        "display-lg-mobile": ["Inter", "sans-serif"],
         "body-md": ["Inter", "sans-serif"],
         "body-lg": ["Inter", "sans-serif"],
-        "label-sm": ["Geist", "sans-serif"],
-        mono: ["Geist", "monospace"],
+        "label-sm": ["Inter", "sans-serif"],
+        mono: ["Inter", "monospace"],
       },
       fontSize: {
         "display-lg": ["64px", { lineHeight: "1.1", letterSpacing: "-0.04em", fontWeight: "700" }],
